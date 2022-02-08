@@ -30,6 +30,11 @@ struct HtmlElement
         oss << i << "</" << name << ">" << endl;
         return oss.str();
     }
+
+    // static HtmlBuilder build(string root_name)
+    // {
+    //     return {root_name};
+    // }
 };
 
 struct HtmlBuilder
@@ -41,20 +46,34 @@ struct HtmlBuilder
         root.name = root_name;
     }
 
-    void add_child(string child_name, string child_text)
+    HtmlBuilder& add_child(string child_name, string child_text)
     {
         HtmlElement e{child_name, child_text};
         root.elements.emplace_back(e);
+        return *this;
+    }
+
+    HtmlBuilder* add_child_2(string child_name, string child_text)
+    {
+        HtmlElement e{child_name, child_text};
+        root.elements.emplace_back(e);
+        return this;
     }
 
     string str() const { return root.str(); }
+
+    //operator HtmlElement() const { return root; }
 };
 
 
 int main()
 {
     HtmlBuilder builder{"ul"};
-    builder.add_child("li", "hello");
-    builder.add_child("li", "world");
+    builder.add_child_2("li", "hello")->add_child_2("li", "world");
     cout << builder.str() << endl;
+
+    //HtmlElement elem = HtmlElement::build("ul");
+    //HtmlElement elem = HtmlElement::build("ul").add_child("li", "aaa").add_child("li", "bbb");
+
+    return 0;
 }
